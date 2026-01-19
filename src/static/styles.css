@@ -24,8 +24,71 @@ header {
   border-radius: 5px;
 }
 
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content div {
+  flex-grow: 1;
+}
+
 header h1 {
   margin-bottom: 10px;
+}
+
+.user-icon {
+  font-size: 24px;
+  background-color: #3949ab;
+  padding: 8px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.user-icon:hover {
+  background-color: #5e35b1;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+.close-modal {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+
+.modal-content h3 {
+  margin-bottom: 20px;
+  color: #1a237e;
 }
 
 main {
@@ -158,6 +221,7 @@ button {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s;
+  width: 100%;
 }
 
 button:hover {
@@ -197,4 +261,16 @@ footer {
   margin-top: 30px;
   padding: 20px;
   color: #666;
+}
+
+.logout-btn {
+  width: auto;
+  background-color: #c62828;
+  padding: 8px 12px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.logout-btn:hover {
+  background-color: #ad1457;
 }
