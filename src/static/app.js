@@ -48,8 +48,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Login form handling
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!username || !password) {
+      loginMessage.textContent = "Username and password are required";
+      loginMessage.className = "error";
+      loginMessage.classList.remove("hidden");
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -61,8 +68,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
+      const result = await response.json();
+
       if (response.ok) {
-        const result = await response.json();
         isTeacher = true;
         currentUsername = result.username;
         userIcon.textContent = "✓";
@@ -79,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 3000);
         fetchActivities();
       } else {
-        loginMessage.textContent = "Invalid username or password";
+        loginMessage.textContent = result.detail || "Invalid username or password";
         loginMessage.className = "error";
         loginMessage.classList.remove("hidden");
       }
@@ -99,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Clear loading message
       activitiesList.innerHTML = "";
+      activitySelect.innerHTML = '<option value="">-- Select an activity --</option>';
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {

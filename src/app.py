@@ -26,7 +26,9 @@ def load_teachers():
     with open(teachers_file, 'r') as f:
         return json.load(f)
 
-teachers_data = load_teachers()
+
+def get_teachers():
+    return load_teachers().get("teachers", [])
 
 # In-memory activity database
 activities = {
@@ -100,7 +102,7 @@ def get_activities():
 @app.post("/auth/login")
 def login(username: str, password: str):
     """Authenticate a teacher"""
-    for teacher in teachers_data["teachers"]:
+    for teacher in get_teachers():
         if teacher["username"] == username and teacher["password"] == password:
             return {"authenticated": True, "username": username}
     raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -111,7 +113,7 @@ def signup_for_activity(activity_name: str, email: str, is_teacher: bool = False
     """Sign up a student for an activity (teachers only)"""
     # Only teachers can register students
     if is_teacher and username:
-        teacher_found = any(t["username"] == username for t in teachers_data["teachers"])
+        teacher_found = any(t["username"] == username for t in get_teachers())
         if not teacher_found:
             raise HTTPException(status_code=401, detail="Unauthorized")
     else:
@@ -124,13 +126,6 @@ def signup_for_activity(activity_name: str, email: str, is_teacher: bool = False
 
     # Get the specific activity
     activity = activities[activity_name]
-
-    # Check if activity is full
-    if len(activity["participants"]) >= activity["max_participants"]:
-        raise HTTPException(
-            status_code=400,
-            detail="Activity is full"
-        )
 
     # Validate student is not already signed up
     if email in activity["participants"]:
@@ -149,7 +144,7 @@ def unregister_from_activity(activity_name: str, email: str, is_teacher: bool = 
     """Unregister a student from an activity (teachers only)"""
     # Only teachers can unregister students
     if is_teacher and username:
-        teacher_found = any(t["username"] == username for t in teachers_data["teachers"])
+        teacher_found = any(t["username"] == username for t in get_teachers())
         if not teacher_found:
             raise HTTPException(status_code=401, detail="Unauthorized")
     else:
